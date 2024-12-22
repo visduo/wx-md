@@ -24,7 +24,7 @@ function addFormat(cmd: string | number) {
                 @add-format="addFormat"
                 @format-content="emit(`formatContent`)"
             />
-            <StyleDropdown/>
+            <StyleDropdown />
             <CopyDropdown
                 @start-copy="emit('startCopy')"
                 @end-copy="emit('endCopy')"
