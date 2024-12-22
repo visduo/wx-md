@@ -3,6 +3,7 @@ import type { ComponentPublicInstance } from 'vue'
 import CssEditor from '@/components/CodemirrorEditor/CssEditor.vue'
 import EditorHeader from '@/components/CodemirrorEditor/Header/index.vue'
 import InsertTableDialog from '@/components/CodemirrorEditor/InsertTableDialog.vue'
+import PostSlider from '@/components/CodemirrorEditor/PostSlider.vue'
 import {
     AlertDialog,
     AlertDialogAction,
@@ -28,7 +29,7 @@ import { onMounted, ref } from 'vue'
 
 const store = useStore()
 const displayStore = useDisplayStore()
-const { output, editor, editorContent } = storeToRefs(store)
+const { output, editor } = storeToRefs(store)
 const { isShowCssEditor } = storeToRefs(displayStore)
 
 const {
@@ -123,7 +124,7 @@ function initEditor() {
     const editorDom = document.querySelector<HTMLTextAreaElement>(`#editor`)!
 
     if (!editorDom.value) {
-        editorDom.value = editorContent.value
+        editorDom.value = store.posts[store.currentPostIndex].content
     }
     editor.value = CodeMirror.fromTextArea(editorDom, {
         mode: `text/x-markdown`,
@@ -172,7 +173,7 @@ function initEditor() {
         clearTimeout(changeTimer.value)
         changeTimer.value = setTimeout(() => {
             onEditorRefresh()
-            editorContent.value = e.getValue()
+            store.posts[store.currentPostIndex].content = e.getValue()
         }, 300)
     })
 }

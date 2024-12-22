@@ -8,7 +8,7 @@ import { useStorage, useToggle } from '@vueuse/core'
 import CodeMirror from 'codemirror'
 import { marked } from 'marked'
 import { defineStore } from 'pinia'
-import { computed, markRaw, onMounted, ref, toRaw } from 'vue'
+import { computed, markRaw, onMounted, ref, toRaw, watch } from 'vue'
 import { toast } from 'vue-sonner'
 
 export const useStore = defineStore(`store`, () => {
@@ -50,10 +50,48 @@ export const useStore = defineStore(`store`, () => {
     // 编辑区域内容
     const editorContent = useStorage(`__editor_content`, DEFAULT_CONTENT)
 
+    const isOpenPostSlider = useStorage(addPrefix(`is_open_post_slider`), true)
+    // 文章列表
+    const posts = useStorage(addPrefix(`posts`), [{
+        title: `文章1`,
+        content: DEFAULT_CONTENT,
+    }])
+    // 当前文章
+    const currentPostIndex = useStorage(addPrefix(`current_post_index`), 0)
+
+    const addPost = (title: string) => {
+        currentPostIndex.value = posts.value.push({
+            title,
+            content: DEFAULT_CONTENT,
+        }) - 1
+    }
+
+    const renamePost = (index: number, title: string) => {
+        posts.value[index].title = title
+    }
+
+    const delPost = (index: number) => {
+        posts.value.splice(index, 1)
+        currentPostIndex.value = 0
+    }
+
+    watch(currentPostIndex, () => {
+        toRaw(editor.value!).setValue(posts.value[currentPostIndex.value].content)
+    })
+
+    onMounted(() => {
+        // 迁移阶段，兼容之前的方案
+        if (editorContent.value !== DEFAULT_CONTENT) {
+            posts.value[currentPostIndex.value].content = editorContent.value
+            editorContent.value = DEFAULT_CONTENT
+        }
+    })
+
     // 格式化文档
     const formatContent = () => {
         formatDoc((editor.value!).getValue()).then((doc) => {
             editorContent.value = doc
+            posts.value[currentPostIndex.value].content = doc
             toRaw(editor.value!).setValue(doc)
         })
     }
@@ -409,6 +447,12 @@ export const useStore = defineStore(`store`, () => {
         setCssEditorValue,
         tabChanged,
         renameTab,
+        posts,
+        currentPostIndex,
+        addPost,
+        renamePost,
+        delPost,
+        isOpenPostSlider,
     }
 })
 
