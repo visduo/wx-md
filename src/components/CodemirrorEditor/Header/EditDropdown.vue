@@ -35,11 +35,6 @@ const formatItems = [
         emitArgs: [`addFormat`, `${ctrlKey}-K`],
     },
     {
-        label: `行内代码`,
-        kbd: [ctrlSign, `E`],
-        emitArgs: [`addFormat`, `${ctrlKey}-E`],
-    },
-    {
         label: `图片`,
         kbd: [ctrlSign, `P`],
         emitArgs: [`addFormat`, `${ctrlKey}-P`],
@@ -48,6 +43,16 @@ const formatItems = [
         label: `表格`,
         kbd: [ctrlSign, `T`],
         emitArgs: [`addFormat`, `${ctrlKey}-T`],
+    },
+    {
+        label: `代码块`,
+        kbd: [ctrlSign, `G`],
+        emitArgs: [`addFormat`, `${ctrlKey}-G`],
+    },
+    {
+        label: `行内代码`,
+        kbd: [ctrlSign, `E`],
+        emitArgs: [`addFormat`, `${ctrlKey}-E`],
     },
     {
         label: `格式化`,

@@ -134,36 +134,40 @@ function initEditor() {
         styleActiveLine: true,
         autoCloseBrackets: true,
         extraKeys: {
-            [`${shiftKey}-${altKey}-F`]: function autoFormat(editor) {
+            [`${shiftKey}-${altKey}-F`]: function extra(editor) {
                 formatDoc(editor.getValue()).then((doc) => {
                     editor.setValue(doc)
                 })
             },
-            [`${ctrlKey}-B`]: function bold(editor) {
+            [`${ctrlKey}-B`]: function extra(editor) {
                 const selected = editor.getSelection()
                 editor.replaceSelection(`**${selected}**`)
             },
-            [`${ctrlKey}-I`]: function italic(editor) {
+            [`${ctrlKey}-I`]: function extra(editor) {
                 const selected = editor.getSelection()
                 editor.replaceSelection(`*${selected}*`)
             },
-            [`${ctrlKey}-D`]: function del(editor) {
+            [`${ctrlKey}-D`]: function extra(editor) {
                 const selected = editor.getSelection()
                 editor.replaceSelection(`~~${selected}~~`)
             },
-            [`${ctrlKey}-K`]: function italic(editor) {
+            [`${ctrlKey}-K`]: function extra(editor) {
                 const selected = editor.getSelection()
                 editor.replaceSelection(`[${selected}]()`)
             },
-            [`${ctrlKey}-E`]: function code(editor) {
+            [`${ctrlKey}-E`]: function extra(editor) {
                 const selected = editor.getSelection()
                 editor.replaceSelection(`\`${selected}\``)
             },
-            [`${ctrlKey}-P`]: function code(editor) {
+            [`${ctrlKey}-P`]: function extra(editor) {
                 const selected = editor.getSelection()
                 editor.replaceSelection(`![${selected}]()`)
             },
-            [`${ctrlKey}-T`]: function code() {
+            [`${ctrlKey}-G`]: function extra(editor) {
+                const selected = editor.getSelection()
+                editor.replaceSelection(`\`\`\`java\n${selected}\`\`\``)
+            },
+            [`${ctrlKey}-T`]: function extra() {
                 toggleShowInsertTableDialog()
             },
         },
