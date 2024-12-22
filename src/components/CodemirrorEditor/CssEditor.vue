@@ -8,8 +8,8 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
-import { Button } from '@/components/ui/button'
+} from '@/components/CommonUI/alert-dialog'
+import { Button } from '@/components/CommonUI/button'
 import {
     Dialog,
     DialogContent,
@@ -17,9 +17,9 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+} from '@/components/CommonUI/dialog'
+import { Input } from '@/components/CommonUI/input'
+import { Tabs, TabsList, TabsTrigger } from '@/components/CommonUI/tabs'
 import { useDisplayStore, useStore } from '@/stores'
 import { Edit3, Plus, X } from 'lucide-vue-next'
 import { ref } from 'vue'

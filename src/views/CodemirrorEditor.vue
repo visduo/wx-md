@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { ComponentPublicInstance } from 'vue'
 import CssEditor from '@/components/CodemirrorEditor/CssEditor.vue'
-import EditorHeader from '@/components/CodemirrorEditor/EditorHeader/index.vue'
-import InsertFormDialog from '@/components/CodemirrorEditor/InsertFormDialog.vue'
+import EditorHeader from '@/components/CodemirrorEditor/Header/index.vue'
+import InsertTableDialog from '@/components/CodemirrorEditor/InsertTableDialog.vue'
 import {
     AlertDialog,
     AlertDialogAction,
@@ -12,39 +12,32 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
+} from '@/components/CommonUI/alert-dialog'
 import {
     ContextMenu,
-    ContextMenuContent,
-    ContextMenuItem,
-    ContextMenuSeparator,
-    ContextMenuShortcut,
     ContextMenuTrigger,
-} from '@/components/ui/context-menu'
-import { altKey, altSign, ctrlKey, shiftKey, shiftSign } from '@/config'
+} from '@/components/CommonUI/context-menu'
+import { altKey, ctrlKey, shiftKey } from '@/config'
 import { useDisplayStore, useStore } from '@/stores'
 import {
     formatDoc,
 } from '@/utils'
 import CodeMirror from 'codemirror'
 import { storeToRefs } from 'pinia'
-import { onMounted, ref, toRaw, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const store = useStore()
 const displayStore = useDisplayStore()
-const { isDark, output, editor, editorContent } = storeToRefs(store)
+const { output, editor, editorContent } = storeToRefs(store)
 const { isShowCssEditor } = storeToRefs(displayStore)
 
 const {
     editorRefresh,
-    exportEditorContent2HTML,
-    exportEditorContent2MD,
     formatContent,
-    importMarkdownContent,
 } = store
 
 const {
-    toggleShowInsertFormDialog,
+    toggleShowInsertTableDialog,
 } = displayStore
 
 const timeout = ref<NodeJS.Timeout>()
@@ -125,12 +118,6 @@ function endCopy() {
 
 const changeTimer = ref<NodeJS.Timeout>()
 
-// 监听暗色模式并更新编辑器
-watch(isDark, () => {
-    const theme = isDark.value ? `darcula` : `xq-light`
-    toRaw(editor.value)?.setOption?.(`theme`, theme)
-})
-
 // 初始化编辑器
 function initEditor() {
     const editorDom = document.querySelector<HTMLTextAreaElement>(`#editor`)!
@@ -140,7 +127,7 @@ function initEditor() {
     }
     editor.value = CodeMirror.fromTextArea(editorDom, {
         mode: `text/x-markdown`,
-        theme: isDark.value ? `darcula` : `xq-light`,
+        theme: `xq-light`,
         lineNumbers: false,
         lineWrapping: true,
         styleActiveLine: true,
@@ -171,10 +158,12 @@ function initEditor() {
                 const selected = editor.getSelection()
                 editor.replaceSelection(`\`${selected}\``)
             },
-            // 预备弃用
-            [`${ctrlKey}-L`]: function code(editor) {
+            [`${ctrlKey}-P`]: function code(editor) {
                 const selected = editor.getSelection()
-                editor.replaceSelection(`\`${selected}\``)
+                editor.replaceSelection(`![${selected}]()`)
+            },
+            [`${ctrlKey}-T`]: function code() {
+                toggleShowInsertTableDialog()
             },
         },
     })
@@ -212,10 +201,11 @@ onMounted(() => {
             @end-copy="endCopy"
         />
         <main class="container-main flex-1">
-            <div class="container-main-section grid h-full border-1" :class="isShowCssEditor ? 'grid-cols-3' : 'grid-cols-2'">
+            <div class="container-main-section h-full flex border-1">
+                <PostSlider />
                 <div
                     ref="codeMirrorWrapper"
-                    class="codeMirror-wrapper border-r-1"
+                    class="codeMirror-wrapper flex-1 border-r-1"
                     :class="{
             'order-1': !store.isEditOnLeft,
           }"
@@ -228,32 +218,13 @@ onMounted(() => {
                   placeholder="Your markdown text here."
               />
                         </ContextMenuTrigger>
-                        <ContextMenuContent class="w-64">
-                            <ContextMenuItem inset @click="toggleShowInsertFormDialog()">
-                                插入表格
-                            </ContextMenuItem>
-                            <ContextMenuSeparator />
-                            <ContextMenuItem inset @click="importMarkdownContent()">
-                                导入 .md 文档
-                            </ContextMenuItem>
-                            <ContextMenuItem inset @click="exportEditorContent2MD()">
-                                导出 .md 文档
-                            </ContextMenuItem>
-                            <ContextMenuItem inset @click="exportEditorContent2HTML()">
-                                导出 .html
-                            </ContextMenuItem>
-                            <ContextMenuItem inset @click="formatContent()">
-                                格式化
-                                <ContextMenuShortcut>{{ altSign }} + {{ shiftSign }} + F</ContextMenuShortcut>
-                            </ContextMenuItem>
-                        </ContextMenuContent>
                     </ContextMenu>
                 </div>
                 <div
                     id="preview"
                     ref="preview"
                     :span="isShowCssEditor ? 8 : 12"
-                    class="preview-wrapper p-5"
+                    class="preview-wrapper flex-1 p-5"
                 >
                     <div id="output-wrapper" :class="{ output_night: !backLight }">
                         <div class="preview border shadow-xl">
@@ -261,17 +232,17 @@ onMounted(() => {
                             <div v-if="isCoping" class="loading-mask">
                                 <div class="loading-mask-box">
                                     <div class="loading__img" />
-                                    <span>正在渲染</span>
+                                    <span>正在生成</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <CssEditor />
+                <CssEditor class="flex-1" />
             </div>
         </main>
 
-        <InsertFormDialog />
+        <InsertTableDialog />
 
         <AlertDialog v-model:open="store.isOpenConfirmDialog">
             <AlertDialogContent>
@@ -291,7 +262,7 @@ onMounted(() => {
         </AlertDialog>
 
         <footer style="color: hsl(var(--foreground)); margin: 0 20px 20px 20px; font-size: 0.8em">
-            © 2024 多栈科技 | 基于开源项目 <a href="https://github.com/Doocs/md" target="_blank">Doocs/md</a> 定制
+            © 2024 多栈科技 | 基于开源项目 <a href="https://github.com/Doocs/md" target="_blank">Doocs/md</a> 定制 | <a href="https://github.com/visduo/wx-md" target="_blank">Github开源</a>
         </footer>
     </div>
 </template>

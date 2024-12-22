@@ -2,8 +2,15 @@ import type { PropertiesHyphen } from 'csstype'
 
 import type { Token } from 'marked'
 
-export type Block = `h1` | `h2` | `h3` | `h4` | `h5` | `h6` | `p` | `blockquote` | `blockquote_p` | `code_pre` | `code` | `image` | `ol` | `ul` | `footnotes` | `figure` | `hr`
-export type Inline = `listitem` | `codespan` | `link` | `wx_link` | `table` | `thead` | `td` | `figcaption`
+export type Elements = `container` | `h1box` | `h1predix` | `h1suffix` | `h1span` |
+  `h2box` | `h2predix` | `h2suffix` | `h2span` |
+  `h3box` | `h3predix` | `h3suffix` | `h3span` |
+  `h4box` | `h4predix` | `h4suffix` | `h4span` |
+  `h5box` | `h5predix` | `h5suffix` | `h5span` |
+  `h6box` | `h6predix` | `h6suffix` | `h6span` |
+  `p` | `blockquote` | `blockquotep` | `pre` | `code` | `image` | `ol` |
+  `ul` | `footnotes` | `figure` | `hr` | `li` | `codespan` |
+  `a_link` | `wx_link` | `table` | `th` | `td` | `figcaption` | `strong`
 
 interface CustomCSSProperties {
     [`--md-primary-color`]?: string
@@ -14,8 +21,7 @@ export type ExtendedProperties = PropertiesHyphen & CustomCSSProperties
 
 export interface Theme {
     base: ExtendedProperties
-    block: Record<Block, ExtendedProperties>
-    inline: Record<Inline, ExtendedProperties>
+    elements: Record<Elements, ExtendedProperties>
 }
 
 export interface IOpts {
@@ -27,7 +33,7 @@ export interface IOpts {
     citeStatus?: boolean
 }
 
-export type ThemeStyles = Record<Block | Inline, ExtendedProperties>
+export type ThemeStyles = Record<Elements, ExtendedProperties>
 
 export interface IConfigOption<VT = string> {
     label: string

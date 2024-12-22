@@ -1,23 +1,19 @@
 import DEFAULT_CONTENT from '@/assets/example/markdown.md?raw'
 import DEFAULT_CSS_CONTENT from '@/assets/example/theme-css.txt?raw'
 import { altKey, codeBlockThemeOptions, colorOptions, fontFamilyOptions, fontSizeOptions, legendOptions, shiftKey, themeMap, themeOptions } from '@/config'
-import { addPrefix, css2json, customCssWithTemplate, customizeTheme, downloadMD, exportHTML, formatDoc } from '@/utils'
+import { addPrefix, css2json, customCssWithTemplate, customizeTheme, downloadMD, formatDoc } from '@/utils'
 import { initRenderer } from '@/utils/renderer'
-import { useDark, useStorage, useToggle } from '@vueuse/core'
+import { useStorage, useToggle } from '@vueuse/core'
 
 import CodeMirror from 'codemirror'
 import { marked } from 'marked'
 import { defineStore } from 'pinia'
-import { computed, markRaw, onMounted, ref, toRaw, watch } from 'vue'
+import { computed, markRaw, onMounted, ref, toRaw } from 'vue'
 import { toast } from 'vue-sonner'
 
 export const useStore = defineStore(`store`, () => {
-    // 是否开启深色模式
-    const isDark = useDark()
-    const toggleDark = useToggle(isDark)
-
     // 是否开启 Mac 代码块
-    const isMacCodeBlock = useStorage(`isMacCodeBlock`, true)
+    const isMacCodeBlock = useStorage(`isMacCodeBlock`, false)
     const toggleMacCodeBlock = useToggle(isMacCodeBlock)
 
     // 是否在左侧编辑
@@ -37,7 +33,7 @@ export const useStore = defineStore(`store`, () => {
     // 文本字体
     const theme = useStorage<keyof typeof themeMap>(addPrefix(`theme`), themeOptions[0].value)
     // 文本字体
-    const fontFamily = useStorage(`fonts`, fontFamilyOptions[2].value)
+    const fontFamily = useStorage(`fonts`, fontFamilyOptions[0].value)
     // 文本大小
     const fontSize = useStorage(`size`, fontSizeOptions[4].value)
     // 主色
@@ -148,7 +144,7 @@ export const useStore = defineStore(`store`, () => {
         let outputTemp = marked.parse(editor.value!.getValue()) as string
 
         // 去除第一行的 margin-top
-        outputTemp = outputTemp.replace(/(style=".*?)"/, `$1;margin-top: 0"`)
+        outputTemp = outputTemp.replace(/(style=".*?)"/, `$1;margin-top: 0!important"`)
         // 引用脚注
         outputTemp += renderer.buildFootnotes()
         // 附加的一些 style
@@ -180,6 +176,7 @@ export const useStore = defineStore(`store`, () => {
     `
 
         output.value = outputTemp
+        output.value = renderer.createContainer(outputTemp)
     }
 
     // 更新 CSS
@@ -196,11 +193,10 @@ export const useStore = defineStore(`store`, () => {
     onMounted(() => {
         const cssEditorDom = document.querySelector<HTMLTextAreaElement>(`#cssEditor`)!
         cssEditorDom.value = getCurrentTab().content
-        const theme = isDark.value ? `darcula` : `xq-light`
         cssEditor.value = markRaw(
             CodeMirror.fromTextArea(cssEditorDom, {
                 mode: `css`,
-                theme,
+                theme: `xq-light`,
                 lineNumbers: false,
                 lineWrapping: true,
                 styleActiveLine: true,
@@ -231,22 +227,16 @@ export const useStore = defineStore(`store`, () => {
         })
     })
 
-    watch(isDark, () => {
-        const theme = isDark.value ? `darcula` : `xq-light`
-        toRaw(cssEditor.value)?.setOption?.(`theme`, theme)
-    })
-
     // 重置样式
     const resetStyle = () => {
         isCiteStatus.value = false
-        isMacCodeBlock.value = true
+        isMacCodeBlock.value = false
 
         theme.value = themeOptions[0].value
-        fontFamily.value = fontFamilyOptions[2].value
-        fontFamily.value = fontFamilyOptions[2].value
+        fontFamily.value = fontFamilyOptions[0].value
         fontSize.value = fontSizeOptions[4].value
         primaryColor.value = colorOptions[0].value
-        codeBlockTheme.value = codeBlockThemeOptions[2].value
+        codeBlockTheme.value = codeBlockThemeOptions[0].value
         legend.value = legendOptions[3].value
 
         cssContentConfig.value = {
@@ -335,12 +325,6 @@ export const useStore = defineStore(`store`, () => {
         toggleUseIndent()
     })
 
-    // 导出编辑器内容为 HTML，并且下载到本地
-    const exportEditorContent2HTML = () => {
-        exportHTML(primaryColor.value)
-        document.querySelector(`#output`)!.innerHTML = output.value
-    }
-
     // 导出编辑器内容到本地
     const exportEditorContent2MD = () => {
         downloadMD(editor.value!.getValue())
@@ -380,9 +364,6 @@ export const useStore = defineStore(`store`, () => {
     }
 
     return {
-        isDark,
-        toggleDark,
-
         isEditOnLeft,
         toggleEditOnLeft,
 
@@ -413,7 +394,6 @@ export const useStore = defineStore(`store`, () => {
         macCodeBlockChanged,
 
         formatContent,
-        exportEditorContent2HTML,
         exportEditorContent2MD,
 
         importMarkdownContent,
@@ -438,13 +418,13 @@ export const useDisplayStore = defineStore(`display`, () => {
     const toggleShowCssEditor = useToggle(isShowCssEditor)
 
     // 是否展示插入表格对话框
-    const isShowInsertFormDialog = ref(false)
-    const toggleShowInsertFormDialog = useToggle(isShowInsertFormDialog)
+    const isShowInsertTableDialog = ref(false)
+    const toggleShowInsertTableDialog = useToggle(isShowInsertTableDialog)
 
     return {
         isShowCssEditor,
         toggleShowCssEditor,
-        isShowInsertFormDialog,
-        toggleShowInsertFormDialog,
+        isShowInsertTableDialog,
+        toggleShowInsertTableDialog,
     }
 })

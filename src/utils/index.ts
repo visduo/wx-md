@@ -1,4 +1,4 @@
-import type { Block, ExtendedProperties, Inline, Theme } from '@/types'
+import type { Elements, ExtendedProperties, Theme } from '@/types'
 
 import type { PropertiesHyphen } from 'csstype'
 import { prefix } from '@/config'
@@ -21,20 +21,21 @@ export function customizeTheme(theme: Theme, options: {
     const { fontSize, color } = options
     if (fontSize) {
         for (let i = 1; i <= 6; i++) {
-            const v = newTheme.block[`h${i}`][`font-size`]
-            newTheme.block[`h${i}`][`font-size`] = `${fontSize * Number.parseFloat(v)}px`
+            const v = newTheme.elements[`h${i}span`][`font-size`]
+            newTheme.elements[`h${i}span`][`font-size`] = `${fontSize * Number.parseFloat(v)}px`
         }
     }
     if (color) {
         newTheme.base[`--md-primary-color`] = color
+        newTheme.base[`--md-primary-lighter-color`] = hexToRGBA(color, 0.2)
     }
     return newTheme as Theme
 }
 
-export function customCssWithTemplate(jsonString: Partial<Record<Block | Inline, PropertiesHyphen>>, color: string, theme: Theme) {
+export function customCssWithTemplate(jsonString: Partial<Record<Elements, PropertiesHyphen>>, color: string, theme: Theme) {
     const newTheme = customizeTheme(theme, { color })
 
-    const mergeProperties = <T extends Block | Inline = Block>(target: Record<T, PropertiesHyphen>, source: Partial<Record<Block | Inline | string, PropertiesHyphen>>, keys: T[]) => {
+    const mergeProperties = <T extends Elements = Elements>(target: Record<T, PropertiesHyphen>, source: Partial<Record<Elements | string, PropertiesHyphen>>, keys: T[]) => {
         keys.forEach((key) => {
             if (source[key]) {
                 target[key] = Object.assign(target[key] || {}, source[key])
@@ -42,27 +43,55 @@ export function customCssWithTemplate(jsonString: Partial<Record<Block | Inline,
         })
     }
 
-    const blockKeys: Block[] = [
-        `h1`,
-        `h2`,
-        `h3`,
-        `h4`,
-        `h5`,
-        `h6`,
-        `code`,
-        `code_pre`,
+    const elementKeys: Elements[] = [
+        `h1box`,
+        `h1predix`,
+        `h1suffix`,
+        `h1span`,
+        `h2box`,
+        `h2predix`,
+        `h2suffix`,
+        `h2span`,
+        `h3box`,
+        `h3predix`,
+        `h3suffix`,
+        `h3span`,
+        `h4box`,
+        `h4predix`,
+        `h4suffix`,
+        `h4span`,
+        `h5box`,
+        `h5predix`,
+        `h5suffix`,
+        `h5span`,
+        `h6box`,
+        `h6predix`,
+        `h6suffix`,
+        `h6span`,
         `p`,
-        `hr`,
         `blockquote`,
-        `blockquote_p`,
+        `blockquotep`,
+        `pre`,
+        `code`,
         `image`,
-        `ul`,
         `ol`,
+        `ul`,
+        `footnotes`,
+        `figure`,
+        `hr`,
+        `li`,
+        `codespan`,
+        `a_link`,
+        `wx_link`,
+        `table`,
+        `th`,
+        `td`,
+        `figcaption`,
+        `strong`,
+        `container`,
     ]
-    const inlineKeys: Inline[] = [`codespan`, `link`, `wx_link`, `listitem`]
 
-    mergeProperties(newTheme.block, jsonString, blockKeys)
-    mergeProperties(newTheme.inline, jsonString, inlineKeys)
+    mergeProperties(newTheme.elements, jsonString, elementKeys)
     return newTheme
 }
 
@@ -72,11 +101,11 @@ export function customCssWithTemplate(jsonString: Partial<Record<Block | Inline,
  * @param {string} css - CSS 字符串
  * @returns {object} - JSON 格式的 CSS
  */
-export function css2json(css: string): Partial<Record<Block | Inline, PropertiesHyphen>> {
+export function css2json(css: string): Partial<Record<Elements, PropertiesHyphen>> {
     // 去除所有 CSS 注释
     css = css.replace(/\/\*[\s\S]*?\*\//g, ``)
 
-    const json: Partial<Record<Block | Inline, PropertiesHyphen>> = {}
+    const json: Partial<Record<Elements, PropertiesHyphen>> = {}
 
     // 辅助函数：将声明数组转换为对象
     const toObject = (array: any[]) =>
@@ -100,7 +129,7 @@ export function css2json(css: string): Partial<Record<Block | Inline, Properties
         // 获取选择器并去除空格
         const selectors = css.substring(0, lbracket)
             .split(`,`)
-            .map(selector => selector.trim()) as (Block | Inline)[]
+            .map(selector => selector.trim()) as (Elements)[]
 
         const declarationObj = toObject(declarations)
 
@@ -159,93 +188,6 @@ export function downloadMD(doc: string) {
     document.body.appendChild(downLink)
     downLink.click()
     document.body.removeChild(downLink)
-}
-
-/**
- * 导出 HTML 生成内容
- */
-export function exportHTML(primaryColor: string) {
-    const element = document.querySelector(`#output`)!
-
-    setStyles(element)
-
-    const htmlStr = element.innerHTML
-        .replaceAll(`var(--md-primary-color)`, primaryColor)
-        .replaceAll(/--md-primary-color:.+?;/g, ``)
-
-    const downLink = document.createElement(`a`)
-
-    downLink.download = `content.html`
-    downLink.style.display = `none`
-    const blob = new Blob([
-        `<html><head><meta charset="utf-8" /></head><body><div style="width: 750px; margin: auto;">${htmlStr}</div></body></html>`,
-    ])
-
-    downLink.href = URL.createObjectURL(blob)
-    document.body.appendChild(downLink)
-    downLink.click()
-    document.body.removeChild(downLink)
-
-    function setStyles(element: Element) {
-        /**
-         * 获取一个 DOM 元素的所有样式，
-         * @param {DOM 元素} element DOM 元素
-         * @param {排除的属性} excludes 如果某些属性对结果有不良影响，可以使用这个参数来排除
-         * @returns 行内样式拼接结果
-         */
-        function getElementStyles(element: Element, excludes = [`width`, `height`, `inlineSize`, `webkitLogicalWidth`, `webkitLogicalHeight`]) {
-            const styles = getComputedStyle(element, null)
-            return Object.entries(styles)
-                .filter(
-                    ([key]) => {
-                        // 将驼峰转换为短横线格式
-                        const kebabKey = key.replace(/[A-Z]/g, match => `-${match.toLowerCase()}`)
-                        return styles.getPropertyValue(kebabKey) && !excludes.includes(key)
-                    },
-                )
-                .map(([key, value]) => {
-                    // 将驼峰转换为短横线格式
-                    const kebabKey = key.replace(/[A-Z]/g, match => `-${match.toLowerCase()}`)
-                    return `${kebabKey}:${value};`
-                })
-                .join(``)
-        }
-
-        switch (true) {
-            case isPre(element):
-            case isCode(element):
-            case isSpan(element):
-                element.setAttribute(`style`, getElementStyles(element))
-        }
-        if (element.children.length) {
-            Array.from(element.children).forEach(child => setStyles(child))
-        }
-
-        // 判断是否是包裹代码块的 pre 元素
-        function isPre(element: Element) {
-            return (
-                element.tagName === `PRE`
-                && Array.from(element.classList).includes(`code__pre`)
-            )
-        }
-
-        // 判断是否是包裹代码块的 code 元素
-        function isCode(element: Element | null) {
-            if (element == null) {
-                return false
-            }
-            return element.tagName === `CODE`
-        }
-
-        // 判断是否是包裹代码字符的 span 元素
-        function isSpan(element: Element) {
-            return (
-                element.tagName === `SPAN`
-                && (isCode(element.parentElement)
-                  || isCode((element.parentElement!).parentElement))
-            )
-        }
-    }
 }
 
 /**
@@ -317,4 +259,15 @@ export function mergeCss(html: string) {
         inlinePseudoElements: true,
         preserveImportant: true,
     })
+}
+
+export function hexToRGBA(hex: string, alpha: number) {
+    hex = hex.replace(`#`, ``)
+    if (hex.length === 3) {
+        hex = hex.split(``).map(char => char + char).join(``)
+    }
+    const r = Number.parseInt(hex.substring(0, 2), 16)
+    const g = Number.parseInt(hex.substring(2, 4), 16)
+    const b = Number.parseInt(hex.substring(4, 6), 16)
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`
 }

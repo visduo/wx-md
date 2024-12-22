@@ -3,8 +3,8 @@ import {
     HoverCard,
     HoverCardContent,
     HoverCardTrigger,
-} from '@/components/ui/hover-card'
-import { MenubarCheckboxItem } from '@/components/ui/menubar'
+} from '@/components/CommonUI/hover-card'
+import { MenubarCheckboxItem } from '@/components/CommonUI/menubar'
 import {
     codeBlockThemeOptions,
     colorOptions,
@@ -68,11 +68,20 @@ const formatOptions = ref<Format[]>([`rgb`, `hex`, `hsl`, `hsv`])
         <MenubarTrigger> 样式 </MenubarTrigger>
         <MenubarContent class="w-56" align="start">
             <StyleOptionMenu
-                title="主题"
+                title="排版主题"
                 :options="themeOptions"
                 :current="theme"
                 :change="themeChanged"
             />
+            <StyleOptionMenu
+                title="代码块主题"
+                :options="codeBlockThemeOptions"
+                :current="codeBlockTheme"
+                :change="codeBlockThemeChanged"
+            />
+            <MenubarCheckboxItem :checked="isMacCodeBlock" @click="macCodeBlockChanged">
+                Mac 代码块
+            </MenubarCheckboxItem>
             <MenubarSeparator />
             <StyleOptionMenu
                 title="字体"
@@ -86,18 +95,9 @@ const formatOptions = ref<Format[]>([`rgb`, `hex`, `hsl`, `hsv`])
                 :current="fontSize"
                 :change="sizeChanged"
             />
-            <StyleOptionMenu
-                title="主题色"
-                :options="colorOptions"
-                :current="primaryColor"
-                :change="colorChanged"
-            />
-            <StyleOptionMenu
-                title="代码块主题"
-                :options="codeBlockThemeOptions"
-                :current="codeBlockTheme"
-                :change="codeBlockThemeChanged"
-            />
+            <MenubarCheckboxItem :checked="store.isUseIndent" @click="store.useIndentChanged()">
+                首行缩进
+            </MenubarCheckboxItem>
             <StyleOptionMenu
                 title="图注格式"
                 :options="legendOptions"
@@ -105,6 +105,12 @@ const formatOptions = ref<Format[]>([`rgb`, `hex`, `hsl`, `hsv`])
                 :change="legendChanged"
             />
             <MenubarSeparator />
+            <StyleOptionMenu
+                title="主题色"
+                :options="colorOptions"
+                :current="primaryColor"
+                :change="colorChanged"
+            />
             <MenubarCheckboxItem @click.self.prevent="showPicker">
                 <HoverCard :open-delay="100">
                     <HoverCardTrigger class="w-full flex">
@@ -116,7 +122,6 @@ const formatOptions = ref<Format[]>([`rgb`, `hex`, `hsl`, `hsv`])
                                 v-model:value="primaryColor"
                                 show-alpha
                                 :format="format" :format-options="formatOptions"
-                                :theme="store.isDark ? 'dark' : 'light'"
                                 :popup-container="pickColorsContainer!"
                                 @change="store.colorChanged"
                             />
@@ -128,12 +133,8 @@ const formatOptions = ref<Format[]>([`rgb`, `hex`, `hsl`, `hsv`])
                 自定义 CSS
             </MenubarCheckboxItem>
             <MenubarSeparator />
-            <MenubarCheckboxItem :checked="isMacCodeBlock" @click="macCodeBlockChanged">
-                Mac 代码块
-            </MenubarCheckboxItem>
-            <MenubarSeparator />
             <MenubarCheckboxItem divided @click="resetStyleConfirm">
-                重置
+                重置样式
             </MenubarCheckboxItem>
         </MenubarContent>
     </MenubarMenu>

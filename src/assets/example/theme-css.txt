@@ -1,71 +1,146 @@
-/* 一级标题 */
-h1 {
+/**
+ * 自定义CSS可对当前主题进行扩展定制
+ * 如需使用主题色，请使用 var(--md-primary-color) 代替颜色值
+ * 如：color var(--md-primary-color);
+ * 主题色会自动转换得到一个亮色，请使用 var(--md-primary-lighter-color) 代替亮色
+ * 如：background-color var(--md-primary-lighter-color);
+ *
+ * 主题设计，请借助浏览器开发者工具进行调试
+ *
+ * 召集令：如果你有好看的主题样式，欢迎分享，让更多人能够使用到你的主题。
+ */
+/* 主体容器 */
+container {
 }
-
-/* 二级标题 */
-h2 {
+/* 一级标题容器 */
+h1box {
 }
-
-/* 三级标题 */
-h3 {
+/* 一级标题前缀 */
+h1predix {
 }
-
-/* 四级标题 */
-h4 {
+/* 一级标题后缀 */
+h1suffix {
 }
-
-/* 五级标题 */
-h5 {
+/* 一级标题内容 */
+h1span {
 }
-
-/* 六级标题 */
-h6 {
+/* 二级标题容器 */
+h2box {
 }
-
+/* 二级标题前缀 */
+h2predix {
+}
+/* 二级标题后缀 */
+h2suffix {
+}
+/* 二级标题内容 */
+h2span {
+}
+/* 三级标题容器 */
+h3box {
+}
+/* 三级标题前缀 */
+h3predix {
+}
+/* 三级标题后缀 */
+h3suffix {
+}
+/* 三级标题内容 */
+h3span {
+}
+/* 四级标题容器 */
+h4box {
+}
+/* 四级标题前缀 */
+h4predix {
+}
+/* 四级标题后缀 */
+h4suffix {
+}
+/* 四级标题内容 */
+h4span {
+}
+/* 五级标题容器 */
+h5box {
+}
+/* 五级标题前缀 */
+h5predix {
+}
+/* 五级标题后缀 */
+h5suffix {
+}
+/* 五级标题内容 */
+h5span {
+}
+/* 六级标题容器 */
+h6box {
+}
+/* 六级标题前缀 */
+h6predix {
+}
+/* 六级标题后缀 */
+h6suffix {
+}
+/* 六级标题内容 */
+h6span {
+}
 /* 段落 */
 p {
 }
-
-/* 引用块 */
-blockquote {
-}
-blockquote_p {
-}
-
-/* 代码块 */
-code_pre {
-}
-code {
-}
-
-/* 行内代码 */
-codespan {
-}
-
-/* 图片 */
-figure{
-}
-figcaption {
-}
-image {
-}
-
 /* 有序列表 */
 ol {
 }
-
 /* 无序列表 */
 ul {
 }
-
 /* 列表项 */
-listitem {
+li {
 }
-
-/* 脚注 */
+/* 普通链接 */
+a_link {
+}
+/* 微信链接 */
+wx_link {
+}
+/* 微信链接底部引用 */
 footnotes {
 }
-
+/* 图片容器 */
+figure {
+}
+/* 图片内容 */
+image {
+}
+/* 图片说明 */
+figcaption {
+}
+/* 引用块容器 */
+blockquote {
+}
+/* 引用块内容 */
+blockquotep {
+}
+/* 表格 */
+table {
+}
+/* 表头单元格 */
+th {
+}
+/* 表项单元格 */
+td {
+}
 /* 水平分割线 */
 hr {
+}
+/* 代码块容器 */
+pre {
+}
+/* 代码块内容 */
+code {
+}
+/* 行内代码 */
+codespan {
+}
+/* 加粗文本 */
+strong {
 }

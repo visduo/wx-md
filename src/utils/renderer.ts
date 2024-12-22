@@ -7,10 +7,8 @@ import hljs from 'highlight.js'
 import { marked } from 'marked'
 import mermaid from 'mermaid'
 import { getStyleString } from '.'
-import markedAlert from './MDAlert'
-import { MDKatex } from './MDKatex'
 
-marked.use(MDKatex({ nonStandard: true }))
+marked.use()
 
 function buildTheme({ theme: _theme, fonts, size, isUseIndent }: IOpts): ThemeStyles {
     const theme = cloneDeep(_theme)
@@ -20,9 +18,9 @@ function buildTheme({ theme: _theme, fonts, size, isUseIndent }: IOpts): ThemeSt
     })
 
     if (isUseIndent) {
-        theme.block.p = {
+        theme.elements.p = {
             'text-indent': `2em`,
-            ...theme.block.p,
+            ...theme.elements.p,
         }
     }
 
@@ -31,8 +29,7 @@ function buildTheme({ theme: _theme, fonts, size, isUseIndent }: IOpts): ThemeSt
             Object.entries(styles).map(([ele, style]) => [ele, toMerged(base, style)]),
         )
     return {
-        ...mergeStyles(theme.inline),
-        ...mergeStyles(theme.block),
+        ...mergeStyles(theme.elements),
     } as ThemeStyles
 }
 
@@ -126,7 +123,7 @@ export function initRenderer(opts: IOpts) {
     function setOptions(newOpts: Partial<IOpts>): void {
         opts = { ...opts, ...newOpts }
         styleMapping = buildTheme(opts)
-        marked.use(markedAlert({ styles: styleMapping }))
+        marked.use()
     }
 
     const buildFootnotes = () => {
@@ -144,7 +141,12 @@ export function initRenderer(opts: IOpts) {
         heading({ tokens, depth }: Tokens.Heading) {
             const text = this.parser.parseInline(tokens)
             const tag = `h${depth}`
-            return styledContent(tag, text)
+            // return styledContent(tag, text)
+            return `<${tag} ${styles(`${tag}box`)}>
+                        <span ${styles(`${tag}prefix`)}></span>
+                        <span ${styles(`${tag}span`)}>${text}</span>
+                        <span ${styles(`${tag}suffix`)}></span>
+                    </${tag}>`
         },
 
         paragraph({ tokens }: Tokens.Paragraph): string {
@@ -159,7 +161,7 @@ export function initRenderer(opts: IOpts) {
 
         blockquote({ tokens }: Tokens.Blockquote): string {
             let text = this.parser.parse(tokens)
-            text = text.replace(/<p .*?>/g, `<p ${styles(`blockquote_p`)}>`)
+            text = text.replace(/<p .*?>/g, `<p ${styles(`blockquotep`)}>`)
             return styledContent(`blockquote`, text)
         },
 
@@ -178,9 +180,9 @@ export function initRenderer(opts: IOpts) {
                 .replace(/\r\n/g, `<br/>`)
                 .replace(/\n/g, `<br/>`)
                 .replace(/(>[^<]+)|(^[^<]+)/g, str => str.replace(/\s/g, `&nbsp;`))
-            const span = `<span class="mac-sign" style="padding: 10px 14px 0;" hidden>${macCodeSvg}</span>`
+            const span = `<span class="mac-sign" style="padding: 10px 14px 0; font-size: 0.8em" hidden>${macCodeSvg}</span>`
             const code = `<code class="language-${lang}" ${styles(`code`)}>${highlighted}</code>`
-            return `<pre class="hljs code__pre" ${styles(`code_pre`)}>${span}${code}</pre>`
+            return `<pre class="hljs code__pre" ${styles(`pre`)}>${span}${code}</pre>`
         },
 
         codespan({ text }: Tokens.Codespan): string {
@@ -190,7 +192,7 @@ export function initRenderer(opts: IOpts) {
         listitem(item: Tokens.ListItem): string {
             const prefix = isOrdered ? `${listIndex + 1}. ` : `• `
             const content = item.tokens.map(t => (this[t.type as keyof Renderer] as <T>(token: T) => string)(t)).join(``)
-            return styledContent(`listitem`, `${prefix}${content}`, `li`)
+            return styledContent(`li`, `${prefix}${content}`, `li`)
         },
 
         list({ ordered, items, start = 1 }: Tokens.List): string {
@@ -206,7 +208,10 @@ export function initRenderer(opts: IOpts) {
         },
 
         image({ href, title, text }: Tokens.Image): string {
-            const subText = styledContent(`figcaption`, transform(opts.legend!, text, title))
+            let subText = ``
+            if (text) {
+                subText = styledContent(`figcaption`, transform(opts.legend!, text, title))
+            }
             const figureStyles = styles(`figure`)
             const imgStyles = styles(`image`)
             return `<figure ${figureStyles}><img ${imgStyles} src="${href}" title="${title}" alt="${text}"/>${subText}</figure>`
@@ -222,9 +227,9 @@ export function initRenderer(opts: IOpts) {
             }
             if (opts.citeStatus) {
                 const ref = addFootnote(title || text, href)
-                return `<span ${styles(`link`)}>${parsedText}<sup>[${ref}]</sup></span>`
+                return `<span ${styles(`a_link`)}>${parsedText}<sup>[${ref}]</sup></span>`
             }
-            return styledContent(`link`, parsedText, `span`)
+            return `<span ${styles(`a_link`)}>${parsedText}</span>`
         },
 
         strong({ tokens }: Tokens.Strong): string {
@@ -232,13 +237,14 @@ export function initRenderer(opts: IOpts) {
         },
 
         em({ tokens }: Tokens.Em): string {
-            return styledContent(`em`, this.parser.parseInline(tokens), `span`)
+            return styledContent(`em`, this.parser.parseInline(tokens))
         },
 
         table({ header, rows }: Tokens.Table): string {
             const headerRow = header
                 .map(cell => this.tablecell(cell))
                 .join(``)
+
             const body = rows
                 .map((row) => {
                     const rowContent = row
@@ -248,18 +254,21 @@ export function initRenderer(opts: IOpts) {
                 })
                 .join(``)
             return `
-        <section ${styles(`table`)}>
-          <table>
-            <thead ${styles(`thead`)}>${headerRow}</thead>
-            <tbody>${body}</tbody>
-          </table>
-        </section>
-      `
+            <section ${styles(`table`)}>
+            <table>
+                <thead ${styles(`thead`)}>${headerRow}</thead>
+                <tbody>${body}</tbody>
+            </table>
+            </section>
+            `
         },
 
         tablecell(token: Tokens.TableCell): string {
             const text = this.parser.parseInline(token.tokens)
-            return styledContent(`td`, text)
+            if (token.header) {
+                return `<th ${styles(`th`)}>${text}</th>`
+            }
+            return `<td ${styles(`td`)}>${text}</td>`
         },
 
         hr(_: Tokens.Hr): string {
@@ -274,5 +283,8 @@ export function initRenderer(opts: IOpts) {
         buildFootnotes,
         setOptions,
         reset,
+        createContainer(content: string) {
+            return styledContent(`container`, content, `section`)
+        },
     }
 }

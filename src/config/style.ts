@@ -3,7 +3,7 @@ import type { IConfigOption } from '@/types'
 export const fontFamilyOptions: IConfigOption[] = [
     {
         label: `无衬线`,
-        value: `-apple-system-font,BlinkMacSystemFont, Helvetica Neue, PingFang SC, Hiragino Sans GB , Microsoft YaHei UI , Microsoft YaHei ,Arial,sans-serif`,
+        value: `-apple-system-font, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Hiragino Sans GB , Microsoft YaHei UI , Microsoft YaHei ,Arial,sans-serif`,
         desc: `字体123Abc`,
     },
     {
@@ -89,7 +89,7 @@ export const colorOptions: IConfigOption[] = [
     },
     {
         label: `石墨黑`,
-        value: `#333333`,
+        value: `#232323`,
         desc: `内敛极简`,
     },
     {
@@ -104,10 +104,13 @@ export const colorOptions: IConfigOption[] = [
     },
 ]
 
-const codeBlockUrlPrefix = `https://cdn.bootcdn.net/ajax/libs/highlight.js/11.10.0/styles/`
+const codeBlockUrlPrefix = `https://unpkg.com/highlight.js@11.11.0/styles/`
 const codeBlockThemeList = [
     `github-dark.min.css`,
-].sort()
+    `github.min.css`,
+    `atom-one-light.min.css`,
+    `atom-one-dark.min.css`,
+]
 
 export const codeBlockThemeOptions: IConfigOption[] = codeBlockThemeList.map((codeBlockTheme) => {
     const label = codeBlockTheme.replace(`.min.css`, ``)

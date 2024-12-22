@@ -5,7 +5,7 @@ import {
     MenubarSub,
     MenubarSubContent,
     MenubarSubTrigger,
-} from '@/components/ui/menubar'
+} from '@/components/CommonUI/menubar'
 
 const props = defineProps<{
     title: string

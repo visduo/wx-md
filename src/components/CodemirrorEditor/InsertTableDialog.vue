@@ -5,15 +5,15 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from '@/components/ui/dialog'
-import { Label } from '@/components/ui/label'
+} from '@/components/CommonUI/dialog'
+import { Label } from '@/components/CommonUI/label'
 import {
     NumberField,
     NumberFieldContent,
     NumberFieldDecrement,
     NumberFieldIncrement,
     NumberFieldInput,
-} from '@/components/ui/number-field'
+} from '@/components/CommonUI/number-field'
 import { useDisplayStore, useStore } from '@/stores'
 
 import { createTable } from '@/utils'
@@ -22,7 +22,7 @@ import { ref, toRaw } from 'vue'
 const store = useStore()
 const displayStore = useDisplayStore()
 
-const { toggleShowInsertFormDialog } = displayStore
+const { toggleShowInsertTableDialog } = displayStore
 
 const rowNum = ref(3)
 const colNum = ref(3)
@@ -34,7 +34,6 @@ function resetVal() {
     tableData.value = {}
 }
 
-// 插入表格
 function insertTable() {
     const table = createTable({
         rows: rowNum.value,
@@ -43,18 +42,18 @@ function insertTable() {
     })
     toRaw(store.editor!).replaceSelection(`\n${table}\n`, `end`)
     resetVal()
-    toggleShowInsertFormDialog()
+    toggleShowInsertTableDialog()
 }
 
 function onUpdate(val: boolean) {
     if (!val) {
-        toggleShowInsertFormDialog(false)
+        toggleShowInsertTableDialog(false)
     }
 }
 </script>
 
 <template>
-    <Dialog :open="displayStore.isShowInsertFormDialog" @update:open="onUpdate">
+    <Dialog :open="displayStore.isShowInsertTableDialog" @update:open="onUpdate">
         <DialogContent>
             <DialogHeader>
                 <DialogTitle>插入表格</DialogTitle>
@@ -90,7 +89,7 @@ function onUpdate(val: boolean) {
                 </div>
             </div>
             <DialogFooter>
-                <Button variant="outline" @click="toggleShowInsertFormDialog(false)">
+                <Button variant="outline" @click="toggleShowInsertTableDialog(false)">
                     取 消
                 </Button>
                 <Button @click="insertTable">
