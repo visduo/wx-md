@@ -17,5 +17,6 @@ export default antfu({
         'vue/html-indent': `off`,
         'format/prettier': `off`,
         'style/quote-props': `off`,
+        'accessor-pairs': `off`,
     },
 })

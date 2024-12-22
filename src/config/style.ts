@@ -15,7 +15,7 @@ export const fontFamilyOptions: IConfigOption[] = [
         label: `等宽`,
         value: `Menlo, Monaco, 'Courier New', monospace`,
         desc: `字体123Abc`,
-    }
+    },
 ]
 
 export const fontSizeOptions: IConfigOption[] = [
@@ -47,6 +47,11 @@ export const fontSizeOptions: IConfigOption[] = [
 ]
 
 export const colorOptions: IConfigOption[] = [
+    {
+        label: `石墨黑`,
+        value: `#232323`,
+        desc: `内敛极简`,
+    },
     {
         label: `经典蓝`,
         value: `#0F4C81`,
@@ -86,11 +91,6 @@ export const colorOptions: IConfigOption[] = [
         label: `橄榄绿`,
         value: `#556B2F`,
         desc: `沉稳自然`,
-    },
-    {
-        label: `石墨黑`,
-        value: `#232323`,
-        desc: `内敛极简`,
     },
     {
         label: `雾烟灰`,
