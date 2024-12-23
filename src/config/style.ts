@@ -2,17 +2,27 @@ import type { IConfigOption } from '@/types'
 
 export const fontFamilyOptions: IConfigOption[] = [
     {
-        label: `无衬线`,
-        value: `-apple-system-font, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Hiragino Sans GB , Microsoft YaHei UI , Microsoft YaHei ,Arial,sans-serif`,
+        label: `经典宋体`,
+        value: `Songti SC, serif`,
         desc: `字体123Abc`,
     },
     {
-        label: `衬线`,
+        label: `系统字体`,
+        value: `-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', STHeiti, 'Microsoft Yahei', Tahoma, Simsun, sans-serif`,
+        desc: `字体123Abc`,
+    },
+    {
+        label: `无衬线字体`,
+        value: `-apple-system-font, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Hiragino Sans GB, Microsoft YaHei UI, Microsoft YaHei, Arial, sans-serif`,
+        desc: `字体123Abc`,
+    },
+    {
+        label: `衬线字体`,
         value: `Optima-Regular, Optima, PingFangSC-light, PingFangTC-light, 'PingFang SC', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif`,
         desc: `字体123Abc`,
     },
     {
-        label: `等宽`,
+        label: `等宽字体`,
         value: `Menlo, Monaco, 'Courier New', monospace`,
         desc: `字体123Abc`,
     },

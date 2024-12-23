@@ -190,9 +190,9 @@ export function initRenderer(opts: IOpts) {
         },
 
         listitem(item: Tokens.ListItem): string {
-            const prefix = isOrdered ? `${listIndex + 1}. ` : `• `
+            const prefix = isOrdered ? `<span style="margin-right: 4px;">${listIndex + 1}.</span>` : `<span style="font-family: Consolas, Monaco, Menlo, monospace; margin-right: 6px;">•</span>`
             const content = item.tokens.map(t => (this[t.type as keyof Renderer] as <T>(token: T) => string)(t)).join(``)
-            return styledContent(`li`, `${prefix}${content}`, `li`)
+            return styledContent(`li`, `<span>${prefix}${content}</span>`, `li`)
         },
 
         list({ ordered, items, start = 1 }: Tokens.List): string {

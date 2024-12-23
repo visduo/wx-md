@@ -8,7 +8,7 @@ const defaultTheme: Theme = {
         '--md-primary-lighter-color': `#000000`,
         'line-height': `1.75`,
         'text-shadow': `0.01em 0.01em 0.01em #999999`,
-        '-webkit-text-stroke-width': `0.35px`,
+        '-webkit-text-stroke-width': `0.38px`,
         '-webkit-font-smoothing': `antialiased`,
         'text-rendering': `optimizeLegibility`,
     },
@@ -150,7 +150,6 @@ const defaultTheme: Theme = {
         li: {
             'display': `block`,
             'margin': `0.3em 0 0 0`,
-            'list-style-position': `inside`,
         },
         // 普通链接
         a_link: {
@@ -190,7 +189,7 @@ const defaultTheme: Theme = {
         },
         // 引用块容器
         blockquote: {
-            'padding': `0.5em 0.8em 0.4em 0.8em`,
+            'padding': `0.5em 0.8em`,
             'margin': `-1em 0 1.875em 0`,
             'border-left-width': `4px`,
             'border-left-color': `var(--md-primary-color)`,
@@ -202,6 +201,7 @@ const defaultTheme: Theme = {
             'color': `hsl(var(--foreground))`,
             'display': `block`,
             'font-size': `0.9em`,
+            'line-height': `1.5`,
         },
         // 表格
         table: {
@@ -216,6 +216,7 @@ const defaultTheme: Theme = {
         // 表头单元格
         th: {
             'padding': `0.2em 0.5em`,
+            'vertical-align': `middle`,
             'border': `1px solid #CCCCCC`,
             'background-color': `rgba(0, 0, 0, 0.05)`,
             'word-break': `keep-all`,
@@ -223,6 +224,7 @@ const defaultTheme: Theme = {
         // 表项单元格
         td: {
             'padding': `0.2em 0.5em`,
+            'vertical-align': `middle`,
             'border': `1px solid #CCCCCC`,
             'word-break': `keep-all`,
         },
@@ -243,20 +245,26 @@ const defaultTheme: Theme = {
         },
         // 代码块内容
         code: {
+            'font-family': `Consolas, Monaco, Menlo, monospace`,
             'margin': `0`,
             'padding': `15px`,
             'white-space': `nowrap`,
-            'font-size': `0.8em`,
+            'font-size': `0.85em`,
             'line-height': `1.5`,
+            'text-shadow': `none`,
+            '-webkit-text-stroke-width': `0.2px`,
         },
         // 行内代码
         codespan: {
+            'font-family': `Consolas, Monaco, Menlo, monospace`,
             'font-size': `0.85em`,
             'line-height': `1`,
             'color': `#AB1942`,
             'padding': `3px 5px`,
             'border-radius': `4px`,
             'background-color': `var(--blockquote-background)`,
+            'text-shadow': `none`,
+            '-webkit-text-stroke-width': `0.2px`,
         },
         // 加粗文本
         strong: {
@@ -273,12 +281,12 @@ const lightlyTheme: Theme = toMerged(defaultTheme, {
         // 一级标题内容
         h1span: {
             'padding': `0 0 0 14px`,
-            'border-left': `4px solid var(--md-primary-color)`,
+            'border-left': `8px solid var(--md-primary-color)`,
         },
         // 二级标题内容
         h2span: {
             'padding': `0 0 0 12px`,
-            'border-left': `4px solid var(--md-primary-color)`,
+            'border-left': `6px solid var(--md-primary-color)`,
         },
         // 三级标题容器
         h3box: {
