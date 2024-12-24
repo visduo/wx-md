@@ -5,7 +5,6 @@ import { cloneDeep, toMerged } from 'es-toolkit'
 import hljs from 'highlight.js'
 
 import { marked } from 'marked'
-import mermaid from 'mermaid'
 import { getStyleString } from '.'
 
 marked.use()
@@ -96,7 +95,6 @@ export function initRenderer(opts: IOpts) {
     const footnotes: [number, string, string][] = []
     let footnoteIndex: number = 0
     let styleMapping: ThemeStyles = buildTheme(opts)
-    let codeIndex: number = 0
     let listIndex: number = 0
     let isOrdered: boolean = false
 
@@ -166,13 +164,6 @@ export function initRenderer(opts: IOpts) {
         },
 
         code({ text, lang = `` }: Tokens.Code): string {
-            if (lang.startsWith(`mermaid`)) {
-                clearTimeout(codeIndex)
-                codeIndex = setTimeout(() => {
-                    mermaid.run()
-                }, 0) as any as number
-                return `<pre class="mermaid">${text}</pre>`
-            }
             const langText = lang.split(` `)[0]
             const language = hljs.getLanguage(langText) ? langText : `plaintext`
             let highlighted = hljs.highlight(text, { language }).value

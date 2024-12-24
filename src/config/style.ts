@@ -116,10 +116,10 @@ export const colorOptions: IConfigOption[] = [
 
 const codeBlockUrlPrefix = `https://unpkg.com/highlight.js@11.11.0/styles/`
 const codeBlockThemeList = [
+    `atom-one-dark.min.css`,
+    `atom-one-light.min.css`,
     `github-dark.min.css`,
     `github.min.css`,
-    `atom-one-light.min.css`,
-    `atom-one-dark.min.css`,
 ]
 
 export const codeBlockThemeOptions: IConfigOption[] = codeBlockThemeList.map((codeBlockTheme) => {

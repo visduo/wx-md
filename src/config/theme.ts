@@ -34,7 +34,7 @@ const defaultTheme: Theme = {
         },
         // 一级标题内容
         h1span: {
-            'font-size': `2em`,
+            'font-size': `1.8em`,
             'font-weight': `bold`,
             'color': `var(--md-primary-color)`,
         },
