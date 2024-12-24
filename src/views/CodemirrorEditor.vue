@@ -24,6 +24,7 @@ import {
     formatDoc,
 } from '@/utils'
 import CodeMirror from 'codemirror'
+import { PanelLeftClose, PanelLeftOpen } from 'lucide-vue-next'
 import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 
@@ -50,6 +51,7 @@ function leftAndRightScroll() {
     const scrollCB = (text: string) => {
         let source: HTMLElement
         let target: HTMLElement
+        console.log(text)
 
         clearTimeout(timeout.value)
         if (text === `preview`) {
@@ -119,12 +121,15 @@ function endCopy() {
 
 const changeTimer = ref<NodeJS.Timeout>()
 
+const charCount = ref(0)
+
 // 初始化编辑器
 function initEditor() {
     const editorDom = document.querySelector<HTMLTextAreaElement>(`#editor`)!
 
     if (!editorDom.value) {
         editorDom.value = store.posts[store.currentPostIndex].content
+        charCount.value = store.posts[store.currentPostIndex].content.replace(/\s/g, ``).length
     }
     editor.value = CodeMirror.fromTextArea(editorDom, {
         mode: `text/x-markdown`,
@@ -178,6 +183,9 @@ function initEditor() {
         changeTimer.value = setTimeout(() => {
             onEditorRefresh()
             store.posts[store.currentPostIndex].content = e.getValue()
+            const value = e.getValue()
+            store.posts[store.currentPostIndex].content = value
+            charCount.value = value.replace(/\s/g, ``).length
         }, 300)
     })
 }
@@ -207,6 +215,21 @@ onMounted(() => {
         />
         <main class="container-main flex-1">
             <div class="container-main-section h-full flex border-1">
+                <div class="flex flex-col border-r p-1">
+                    <TooltipProvider :delay-duration="200">
+                        <Tooltip>
+                            <TooltipTrigger as-child>
+                                <Button size="icon" variant="ghost" @click="store.isOpenPostSlider = !store.isOpenPostSlider">
+                                    <PanelLeftOpen v-show="!store.isOpenPostSlider" class="size-4" />
+                                    <PanelLeftClose v-show="store.isOpenPostSlider" class="size-4" />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="right">
+                                {{ store.isOpenPostSlider ? "关闭" : "展开" }}
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </div>
                 <PostSlider />
                 <div
                     ref="codeMirrorWrapper"
@@ -225,22 +248,27 @@ onMounted(() => {
                         </ContextMenuTrigger>
                     </ContextMenu>
                 </div>
-                <div
-                    id="preview"
-                    ref="preview"
-                    :span="isShowCssEditor ? 8 : 12"
-                    class="preview-wrapper flex-1 p-5"
-                >
-                    <div id="output-wrapper" :class="{ output_night: !backLight }">
-                        <div class="preview border shadow-xl">
-                            <section id="output" v-html="output" />
-                            <div v-if="isCoping" class="loading-mask">
-                                <div class="loading-mask-box">
-                                    <div class="loading__img" />
-                                    <span>正在生成</span>
+                <div class="relative flex-1">
+                    <div
+                        id="preview"
+                        ref="preview"
+                        :span="isShowCssEditor ? 8 : 12"
+                        class="preview-wrapper flex-1 p-5"
+                    >
+                        <div id="output-wrapper" :class="{ output_night: !backLight }">
+                            <div class="preview border shadow-xl">
+                                <section id="output" v-html="output" />
+                                <div v-if="isCoping" class="loading-mask">
+                                    <div class="loading-mask-box">
+                                        <div class="loading__img" />
+                                        <span>正在生成</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="bg-muted absolute bottom-0 left-0 p-2 text-xs shadow">
+                        {{ charCount }} 个字符
                     </div>
                 </div>
                 <CssEditor class="flex-1" />
