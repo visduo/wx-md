@@ -168,6 +168,7 @@ export function initRenderer(opts: IOpts) {
             const language = hljs.getLanguage(langText) ? langText : `plaintext`
             let highlighted = hljs.highlight(text, { language }).value
             highlighted = highlighted
+                .replace(/\t/g, `    `)
                 .replace(/\r\n/g, `<br/>`)
                 .replace(/\n/g, `<br/>`)
                 .replace(/(>[^<]+)|(^[^<]+)/g, str => str.replace(/\s/g, `&nbsp;`))
