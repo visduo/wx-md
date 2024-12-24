@@ -16,7 +16,7 @@ container {
 h1box {
 }
 /* 一级标题前缀 */
-h1predix {
+h1prefix {
 }
 /* 一级标题后缀 */
 h1suffix {
@@ -28,7 +28,7 @@ h1span {
 h2box {
 }
 /* 二级标题前缀 */
-h2predix {
+h2prefix {
 }
 /* 二级标题后缀 */
 h2suffix {
@@ -40,7 +40,7 @@ h2span {
 h3box {
 }
 /* 三级标题前缀 */
-h3predix {
+h3prefix {
 }
 /* 三级标题后缀 */
 h3suffix {
@@ -52,7 +52,7 @@ h3span {
 h4box {
 }
 /* 四级标题前缀 */
-h4predix {
+h4prefix {
 }
 /* 四级标题后缀 */
 h4suffix {
@@ -64,7 +64,7 @@ h4span {
 h5box {
 }
 /* 五级标题前缀 */
-h5predix {
+h5prefix {
 }
 /* 五级标题后缀 */
 h5suffix {
@@ -76,7 +76,7 @@ h5span {
 h6box {
 }
 /* 六级标题前缀 */
-h6predix {
+h6prefix {
 }
 /* 六级标题后缀 */
 h6suffix {

@@ -2,12 +2,12 @@ import type { PropertiesHyphen } from 'csstype'
 
 import type { Token } from 'marked'
 
-export type Elements = `container` | `h1box` | `h1predix` | `h1suffix` | `h1span` |
-  `h2box` | `h2predix` | `h2suffix` | `h2span` |
-  `h3box` | `h3predix` | `h3suffix` | `h3span` |
-  `h4box` | `h4predix` | `h4suffix` | `h4span` |
-  `h5box` | `h5predix` | `h5suffix` | `h5span` |
-  `h6box` | `h6predix` | `h6suffix` | `h6span` |
+export type Elements = `container` | `h1box` | `h1prefix` | `h1suffix` | `h1span` |
+  `h2box` | `h2prefix` | `h2suffix` | `h2span` |
+  `h3box` | `h3prefix` | `h3suffix` | `h3span` |
+  `h4box` | `h4prefix` | `h4suffix` | `h4span` |
+  `h5box` | `h5prefix` | `h5suffix` | `h5span` |
+  `h6box` | `h6prefix` | `h6suffix` | `h6span` |
   `p` | `blockquote` | `blockquotep` | `pre` | `code` | `image` | `ol` |
   `ul` | `footnotes` | `figure` | `hr` | `li` | `codespan` |
   `a_link` | `wx_link` | `table` | `th` | `td` | `figcaption` | `strong`

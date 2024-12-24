@@ -31,7 +31,7 @@ export const useStore = defineStore(`store`, () => {
     const output = ref(``)
 
     // 编辑器主题
-    const theme = useStorage<keyof typeof themeMap>(addPrefix(`theme`), themeOptions[1].value)
+    const theme = useStorage<keyof typeof themeMap>(addPrefix(`theme`), themeOptions[0].value)
     // 文本字体
     const fontFamily = useStorage(`fonts`, fontFamilyOptions[0].value)
     // 文本大小
@@ -270,7 +270,7 @@ export const useStore = defineStore(`store`, () => {
         isCiteStatus.value = false
         isMacCodeBlock.value = false
 
-        theme.value = themeOptions[1].value
+        theme.value = themeOptions[0].value
         fontFamily.value = fontFamilyOptions[0].value
         fontSize.value = fontSizeOptions[4].value
         primaryColor.value = colorOptions[0].value
@@ -384,7 +384,7 @@ export const useStore = defineStore(`store`, () => {
             const reader = new FileReader()
             reader.readAsText(file)
             reader.onload = (event) => {
-                (editor.value!).setValue((event.target!).result as string)
+                toRaw(editor.value!).setValue((event.target!).result as string)
                 toast.success(`文档导入成功`)
             }
         }

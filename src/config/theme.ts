@@ -11,6 +11,7 @@ const defaultTheme: Theme = {
         '-webkit-text-stroke-width': `0.38px`,
         '-webkit-font-smoothing': `antialiased`,
         'text-rendering': `optimizeLegibility`,
+        'word-break': `break-all`,
     },
     elements: {
         // 主体容器
@@ -24,7 +25,7 @@ const defaultTheme: Theme = {
             'margin': `5em 0 2em 0`,
         },
         // 一级标题前缀
-        h1predix: {
+        h1prefix: {
             'display': `none`,
         },
         // 一级标题后缀
@@ -43,7 +44,7 @@ const defaultTheme: Theme = {
             'margin': `3em 0 2em 0`,
         },
         // 二级标题前缀
-        h2predix: {
+        h2prefix: {
             'display': `none`,
         },
         // 二级标题后缀
@@ -61,7 +62,7 @@ const defaultTheme: Theme = {
             'margin': `0 0 1.5em 0`,
         },
         // 三级标题前缀
-        h3predix: {
+        h3prefix: {
             'display': `none`,
         },
         // 三级标题后缀
@@ -79,7 +80,7 @@ const defaultTheme: Theme = {
             'margin': `0 0 1.5em 0`,
         },
         // 四级标题前缀
-        h4predix: {
+        h4prefix: {
             'display': `none`,
         },
         // 四级标题后缀
@@ -97,7 +98,7 @@ const defaultTheme: Theme = {
             'margin': `0 0 1.5em 0`,
         },
         // 五级标题前缀
-        h5predix: {
+        h5prefix: {
             'display': `none`,
         },
         // 五级标题后缀
@@ -115,7 +116,7 @@ const defaultTheme: Theme = {
             'margin': `0 0 1.5em 0`,
         },
         // 六级标题前缀
-        h6predix: {
+        h6prefix: {
             'display': `none`,
         },
         // 六级标题后缀
@@ -132,7 +133,6 @@ const defaultTheme: Theme = {
         p: {
             'color': `hsl(var(--foreground))`,
             'margin': `0 0 1.5em 0`,
-            'word-break': `break-all`,
         },
         // 有序列表
         ol: {
