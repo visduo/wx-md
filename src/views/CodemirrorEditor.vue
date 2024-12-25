@@ -49,9 +49,11 @@ const preview = ref<HTMLDivElement | null>(null)
 // 使浏览区与编辑区滚动条建立同步联系
 function leftAndRightScroll() {
     const scrollCB = (text: string) => {
+        if (!store.isLeftAndRightScroll) {
+            return
+        }
         let source: HTMLElement
         let target: HTMLElement
-        console.log(text)
 
         clearTimeout(timeout.value)
         if (text === `preview`) {

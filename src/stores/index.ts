@@ -36,6 +36,7 @@ export const useStore = defineStore(`store`, () => {
     const fontFamily = useStorage(`fonts`, fontFamilyOptions[0].value)
     // 文本大小
     const fontSize = useStorage(`size`, fontSizeOptions[4].value)
+    const fontSizeNumber = computed(() => Number(fontSize.value.replace(`px`, ``)))
     // 主色
     const primaryColor = useStorage(`color`, colorOptions[0].value)
     // 代码块主题
@@ -43,13 +44,15 @@ export const useStore = defineStore(`store`, () => {
     // 图注格式
     const legend = useStorage(`legend`, legendOptions[3].value)
 
-    const fontSizeNumber = computed(() => Number(fontSize.value.replace(`px`, ``)))
-
     // 内容编辑器编辑器
     const editor = ref<CodeMirror.EditorFromTextArea | null>(null)
     // 编辑区域内容
     const editorContent = useStorage(`__editor_content`, DEFAULT_CONTENT)
 
+    // 是否开启浏览区与编辑区滚动条建立同步联系
+    const isLeftAndRightScroll = useStorage(addPrefix(`is_left_and_right_scroll`), true)
+
+    // 是否开启文章列表
     const isOpenPostSlider = useStorage(addPrefix(`is_open_post_slider`), true)
     // 文章列表
     const posts = useStorage(addPrefix(`posts`), [{
@@ -453,6 +456,7 @@ export const useStore = defineStore(`store`, () => {
         renamePost,
         delPost,
         isOpenPostSlider,
+        isLeftAndRightScroll,
     }
 })
 

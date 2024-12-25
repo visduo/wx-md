@@ -63,7 +63,7 @@ const formatItems = [
 
 const store = useStore()
 
-const { isEditOnLeft, isCiteStatus } = storeToRefs(store)
+const { isEditOnLeft, isCiteStatus, isLeftAndRightScroll } = storeToRefs(store)
 const { citeStatusChanged } = store
 </script>
 
@@ -89,6 +89,9 @@ const { citeStatusChanged } = store
             <MenubarSeparator />
             <MenubarCheckboxItem v-model:checked="isEditOnLeft">
                 左侧编辑
+            </MenubarCheckboxItem>
+            <MenubarCheckboxItem v-model:checked="isLeftAndRightScroll">
+                滚动跟随
             </MenubarCheckboxItem>
         </MenubarContent>
     </MenubarMenu>
