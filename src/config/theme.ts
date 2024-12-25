@@ -215,6 +215,7 @@ const defaultTheme: Theme = {
         },
         // 表头单元格
         th: {
+            'font-weight': `normal`,
             'padding': `0.2em 0.5em`,
             'vertical-align': `middle`,
             'border': `1px solid #CCCCCC`,

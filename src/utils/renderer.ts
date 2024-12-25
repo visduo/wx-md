@@ -247,7 +247,7 @@ export function initRenderer(opts: IOpts) {
                 .join(``)
             return `
             <section ${styles(`table`)}>
-            <table>
+            <table style="margin-bottom: 0!important;">
                 <thead ${styles(`thead`)}>${headerRow}</thead>
                 <tbody>${body}</tbody>
             </table>
