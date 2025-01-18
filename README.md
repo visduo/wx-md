@@ -1,1 +1,1 @@
-微信公众号Markdown编辑器，基于开源项目Doocs/md定制。
+微信公众号 Markdown 编辑器，基于开源项目 Doocs/md 定制。
