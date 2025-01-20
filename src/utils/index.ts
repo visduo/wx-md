@@ -174,6 +174,80 @@ export async function formatDoc(content: string, type: `markdown` | `css` = `mar
 }
 
 /**
+ * 格式化排版
+ * @param {string} content - 要格式化的内容
+ * @returns {Promise<string>} - 格式化后的内容
+ */
+export async function formatTypesetting(content: string) {
+    // 匹配代码块区域
+    const codeBlockPattern = /```([\s\S]*?)```/g
+    const codeBlocks: string[] = []
+    let index = 0
+    content = content.replace(codeBlockPattern, (match) => {
+        codeBlocks[index] = match
+        return `__CODEBLOCK_${index++}__`
+    })
+
+    // 匹配英文和中文相邻的情况
+    const enZhPattern1 = /([a-z])([\u4E00-\u9FA5])/gi
+    const enZhPattern2 = /([\u4E00-\u9FA5])([a-z])/gi
+    // 匹配中文和数字相邻的情况
+    const zhNumPattern1 = /([\u4E00-\u9FA5])(\d)/g
+    const zhNumPattern2 = /(\d)([\u4E00-\u9FA5])/g
+    // 匹配中文和标点相邻的情况
+    const zhPunctuationPattern1 = /([\u4E00-\u9FA5])([“”‘’"'])/g
+    const zhPunctuationPattern2 = /([“”‘’"'])([\u4E00-\u9FA5])/g
+
+    // 处理中英文相邻情况
+    content = content.replace(enZhPattern1, (match, p1, p2) => {
+        if (p1 && p2) {
+            return `${p1} ${p2}`
+        }
+        return match
+    })
+    content = content.replace(enZhPattern2, (match, p1, p2) => {
+        if (p1 && p2) {
+            return `${p1} ${p2}`
+        }
+        return match
+    })
+    // 处理中文和数字相邻情况
+    content = content.replace(zhNumPattern1, (match, p1, p2) => {
+        if (p1 && p2) {
+            return `${p1} ${p2}`
+        }
+        return match
+    })
+    content = content.replace(zhNumPattern2, (match, p1, p2) => {
+        if (p1 && p2) {
+            return `${p1} ${p2}`
+        }
+        return match
+    })
+    // 处理中文和标点相邻情况
+    content = content.replace(zhPunctuationPattern1, (match, p1, p2) => {
+        if (p1 && p2) {
+            return `${p1} ${p2}`
+        }
+        return match
+    })
+    content = content.replace(zhPunctuationPattern2, (match, p1, p2) => {
+        if (p1 && p2) {
+            return `${p1} ${p2}`
+        }
+        return match
+    })
+
+    // 将代码块替换回去
+    index = 0
+    content = content.replace(/__CODEBLOCK_(\d+)__/g, (match, p1) => {
+        return codeBlocks[Number.parseInt(p1)]
+    })
+
+    return content
+}
+
+/**
  * 导出原始 Markdown 文档
  * @param {string} doc - 文档内容
  */

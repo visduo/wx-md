@@ -297,7 +297,7 @@ onMounted(() => {
         </AlertDialog>
 
         <footer style="color: hsl(var(--foreground)); margin: 0 20px 20px 20px; font-size: 0.8em">
-            © 2024 多栈科技 | 基于开源项目 <a href="https://github.com/Doocs/md" target="_blank">Doocs/md</a> 定制 | <a href="https://github.com/visduo/wx-md" target="_blank">Github开源</a>
+            © 2025 多栈科技 | 基于开源项目 <a href="https://github.com/Doocs/md" target="_blank">Doocs/md</a> 定制 | <a href="https://github.com/visduo/wx-md" target="_blank">Github开源</a>
         </footer>
     </div>
 </template>

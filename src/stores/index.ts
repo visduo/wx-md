@@ -1,7 +1,7 @@
 import DEFAULT_CONTENT from '@/assets/example/markdown.md?raw'
 import DEFAULT_CSS_CONTENT from '@/assets/example/theme-css.txt?raw'
 import { altKey, codeBlockThemeOptions, colorOptions, fontFamilyOptions, fontSizeOptions, legendOptions, shiftKey, themeMap, themeOptions } from '@/config'
-import { addPrefix, css2json, customCssWithTemplate, customizeTheme, downloadMD, formatDoc } from '@/utils'
+import { addPrefix, css2json, customCssWithTemplate, customizeTheme, downloadMD, formatDoc, formatTypesetting } from '@/utils'
 import { initRenderer } from '@/utils/renderer'
 import { useStorage, useToggle } from '@vueuse/core'
 
@@ -91,8 +91,14 @@ export const useStore = defineStore(`store`, () => {
     })
 
     // 格式化文档
-    const formatContent = () => {
-        formatDoc((editor.value!).getValue()).then((doc) => {
+    const formatContent = async () => {
+        await formatDoc((editor.value!).getValue()).then((doc) => {
+            editorContent.value = doc
+            posts.value[currentPostIndex.value].content = doc
+            toRaw(editor.value!).setValue(doc)
+        })
+
+        await formatTypesetting((editor.value!).getValue()).then((doc) => {
             editorContent.value = doc
             posts.value[currentPostIndex.value].content = doc
             toRaw(editor.value!).setValue(doc)
