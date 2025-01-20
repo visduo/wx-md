@@ -195,8 +195,8 @@ export async function formatTypesetting(content: string) {
     const zhNumPattern1 = /([\u4E00-\u9FA5])(\d)/g
     const zhNumPattern2 = /(\d)([\u4E00-\u9FA5])/g
     // 匹配中文和标点相邻的情况
-    const zhPunctuationPattern1 = /([\u4E00-\u9FA5])([“”‘’"'])/g
-    const zhPunctuationPattern2 = /([“”‘’"'])([\u4E00-\u9FA5])/g
+    const zhPunctuationPattern1 = /([\u4E00-\u9FA5])([“‘])/g
+    const zhPunctuationPattern2 = /([”’])([\u4E00-\u9FA5])/g
 
     // 处理中英文相邻情况
     content = content.replace(enZhPattern1, (match, p1, p2) => {
