@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { ComponentPublicInstance } from 'vue'
-import CssEditor from '@/components/CodemirrorEditor/CssEditor.vue'
+import InsertTableDialog from '@/components/CodemirrorEditor/Dialog/InsertTableDialog.vue'
 import EditorHeader from '@/components/CodemirrorEditor/Header/index.vue'
-import InsertTableDialog from '@/components/CodemirrorEditor/InsertTableDialog.vue'
-import PostSlider from '@/components/CodemirrorEditor/PostSlider.vue'
+import CssEditor from '@/components/CodemirrorEditor/Sidebar/CssEditor.vue'
+import PostSlider from '@/components/CodemirrorEditor/Sidebar/PostSlider.vue'
 import {
     AlertDialog,
     AlertDialogAction,
@@ -297,7 +297,7 @@ onMounted(() => {
         </AlertDialog>
 
         <footer style="color: hsl(var(--foreground)); margin: 0 20px 20px 20px; font-size: 0.8em">
-            © 2025 多栈科技 | 基于开源项目 <a href="https://github.com/Doocs/md" target="_blank">Doocs/md</a> 定制 | <a href="https://github.com/visduo/wx-md" target="_blank">Github开源</a>
+            © 2025 多栈科技 | 基于开源项目 <a href="https://github.com/Doocs/md" target="_blank">Doocs/md</a> 定制、<a href="https://github.com/357929231/jtt" target="_blank">357929231/jtt</a> 定制 | <a href="https://github.com/visduo/wx-md" target="_blank">Github开源</a>
         </footer>
     </div>
 </template>
