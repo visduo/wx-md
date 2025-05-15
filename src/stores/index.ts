@@ -183,12 +183,38 @@ export const useStore = defineStore(`store`, () => {
         isUseIndent: isUseIndent.value,
     })
 
+    // 文章标题
+    const titleList = ref<{
+        url: string
+        title: string
+        level: number
+    }[]>([])
+
     // 更新编辑器
     const editorRefresh = () => {
         codeThemeChange()
         renderer.reset({ citeStatus: isCiteStatus.value, legend: legend.value, isUseIndent: isUseIndent.value })
 
         let outputTemp = marked.parse(editor.value!.getValue()) as string
+
+        // 提取标题
+        const div = document.createElement(`div`)
+        div.innerHTML = outputTemp
+        const list = div.querySelectorAll<HTMLElement>(`[data-heading]`)
+
+        titleList.value = []
+        let i = 0
+        for (const item of list) {
+            item.setAttribute(`id`, `${i}`)
+            titleList.value.push({
+                url: `#${i}`,
+                title: `${item.textContent}`,
+                level: Number(item.tagName.slice(1)),
+            })
+            i++
+        }
+
+        outputTemp = div.innerHTML
 
         // 去除第一行的 margin-top
         outputTemp = outputTemp.replace(/(style=".*?)"/, `$1;margin-top: 0!important"`)
@@ -463,6 +489,7 @@ export const useStore = defineStore(`store`, () => {
         delPost,
         isOpenPostSlider,
         isLeftAndRightScroll,
+        titleList,
     }
 })
 

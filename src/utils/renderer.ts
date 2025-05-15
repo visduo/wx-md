@@ -140,7 +140,7 @@ export function initRenderer(opts: IOpts) {
             const text = this.parser.parseInline(tokens)
             const tag = `h${depth}`
             // return styledContent(tag, text)
-            return `<${tag} ${styles(`${tag}box`)}>
+            return `<${tag} data-heading="true" ${styles(`${tag}box`)}>
                         <span ${styles(`${tag}prefix`)}></span>
                         <span ${styles(`${tag}span`)}>${text}</span>
                         <span ${styles(`${tag}suffix`)}></span>
