@@ -263,7 +263,11 @@ export function initRenderer(opts: IOpts) {
             return `<td ${styles(`td`)}>${text}</td>`
         },
 
-        hr(_: Tokens.Hr): string {
+        hr(token: Tokens.Hr): string {
+            if (token.raw.includes(`***`)) {
+                // return `<hr style="margin-top: 2.125em;">`
+                return `<hr ${styles(`hr`, `;margin: 2.325em 0px 1.875em 0px;`)}>`
+            }
             return styledContent(`hr`, ``)
         },
     }
