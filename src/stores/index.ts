@@ -92,11 +92,11 @@ export const useStore = defineStore(`store`, () => {
 
     // 格式化文档
     const formatContent = async () => {
-        await formatDoc((editor.value!).getValue()).then((doc) => {
-            editorContent.value = doc
-            posts.value[currentPostIndex.value].content = doc
-            toRaw(editor.value!).setValue(doc)
-        })
+        // await formatDoc((editor.value!).getValue()).then((doc) => {
+        //     editorContent.value = doc
+        //     posts.value[currentPostIndex.value].content = doc
+        //     toRaw(editor.value!).setValue(doc)
+        // })
 
         await formatTypesetting((editor.value!).getValue()).then((doc) => {
             editorContent.value = doc
